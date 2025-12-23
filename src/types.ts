@@ -1,6 +1,6 @@
-export type SohMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+export type SoviMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export interface SohClientConfig {
+export interface SoviClientConfig {
   baseUrl?: string;
   headers?: Record<string, string>;
 }
@@ -10,7 +10,7 @@ export type QueryParams = Record<
   string | number | boolean | null | undefined
 >;
 
-export type SohHeaders = Record<string, string>;
+export type SoviHeaders = Record<string, string>;
 
 export type PathParams = Record<string, string | number>;
 
@@ -34,7 +34,7 @@ export type HasUrlParams<T extends string> = T extends `${string}:${string}`
   ? true
   : false;
 
-export type SohBody =
+export type SoviBody =
   | Record<string, unknown>
   | FormData
   | Blob
@@ -43,16 +43,16 @@ export type SohBody =
   | string
   | null;
 
-export interface SohRequestState {
+export interface SoviRequestState {
   baseUrl?: string;
   query: QueryParams;
-  headers: SohHeaders;
+  headers: SoviHeaders;
 }
 
 /**
  * Request ready to be executed
  */
-export interface SohRequest<T> {
+export interface SoviRequest<T> {
   json(): Promise<T>;
   text(): Promise<string>;
   blob(): Promise<Blob>;
@@ -64,29 +64,29 @@ export interface SohRequest<T> {
 /**
  * Request with URL set, ready for HTTP method
  */
-export interface SohWithUrl<T = unknown> {
-  get(): SohRequest<T>;
-  post(body?: SohBody): SohRequest<T>;
-  put(body?: SohBody): SohRequest<T>;
-  patch(body?: SohBody): SohRequest<T>;
-  delete(): SohRequest<T>;
+export interface SoviWithUrl<T = unknown> {
+  get(): SoviRequest<T>;
+  post(body?: SoviBody): SoviRequest<T>;
+  put(body?: SoviBody): SoviRequest<T>;
+  patch(body?: SoviBody): SoviRequest<T>;
+  delete(): SoviRequest<T>;
 }
 
 /**
- * Soh HTTP client instance
+ * Sovi HTTP client instance
  */
-export interface Soh extends SohWithUrl {
+export interface Sovi extends SoviWithUrl {
   /**
    * Add query parameters
    * @example api.query({ page: 1, limit: 10 }).get()
    */
-  query(params: QueryParams): Soh;
+  query(params: QueryParams): Sovi;
 
   /**
    * Add headers
    * @example api.headers({ "Authorization": "Bearer token" }).get()
    */
-  headers(headers: SohHeaders): Soh;
+  headers(headers: SoviHeaders): Sovi;
 
   /**
    * Set URL with optional path parameters
@@ -97,5 +97,5 @@ export interface Soh extends SohWithUrl {
   url<T = unknown, U extends string = string>(
     url: U,
     ...params: HasUrlParams<U> extends true ? [params: InferUrlParams<U>] : []
-  ): SohWithUrl<T>;
+  ): SoviWithUrl<T>;
 }

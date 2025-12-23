@@ -3,18 +3,18 @@ import {
   InferUrlParams,
   PathParams,
   QueryParams,
-  SohBody,
-  SohClientConfig,
-  SohHeaders,
-  SohMethod,
-  SohRequest,
-  SohRequestState,
-  SohWithUrl,
+  SoviBody,
+  SoviClientConfig,
+  SoviHeaders,
+  SoviMethod,
+  SoviRequest,
+  SoviRequestState,
+  SoviWithUrl,
 } from "./types";
-import { SohResponse, SohWithUrlImpl } from "./request";
+import { SoviResponse, SoviWithUrlImpl } from "./request";
 import { isJsonBody, replacePathParams } from "./utils";
 
-function createInitialState(config?: SohClientConfig): SohRequestState {
+function createInitialState(config?: SoviClientConfig): SoviRequestState {
   return {
     baseUrl: config?.baseUrl,
     query: {},
@@ -22,16 +22,16 @@ function createInitialState(config?: SohClientConfig): SohRequestState {
   };
 }
 
-export class SohBuilder {
-  private readonly _state: SohRequestState;
+export class SoviBuilder {
+  private readonly _state: SoviRequestState;
 
-  private constructor(state: SohRequestState) {
+  private constructor(state: SoviRequestState) {
     this._state = state;
   }
 
-  static create(config?: SohClientConfig) {
+  static create(config?: SoviClientConfig) {
     const state = createInitialState(config);
-    return new SohBuilder(state);
+    return new SoviBuilder(state);
   }
 
   private resolveUrl(path: string): string {
@@ -63,8 +63,8 @@ export class SohBuilder {
     return fullPath + separator + params.toString();
   }
 
-  private clone(next: Partial<SohRequestState>): SohBuilder {
-    return new SohBuilder({
+  private clone(next: Partial<SoviRequestState>): SoviBuilder {
+    return new SoviBuilder({
       ...this._state,
       ...next,
       headers: { ...this._state.headers, ...(next.headers ?? {}) },
@@ -79,18 +79,18 @@ export class SohBuilder {
     return this.clone({ query: params });
   }
 
-  headers(headers: SohHeaders) {
+  headers(headers: SoviHeaders) {
     return this.clone({ headers });
   }
 
-  private _withPath<T>(path: string): SohWithUrl<T> {
-    return new SohWithUrlImpl<T>(this.executeRequest.bind(this), path);
+  private _withPath<T>(path: string): SoviWithUrl<T> {
+    return new SoviWithUrlImpl<T>(this.executeRequest.bind(this), path);
   }
 
   url<T = unknown, U extends string = string>(
     path: U,
     ...params: HasUrlParams<U> extends true ? [params: InferUrlParams<U>] : []
-  ): SohWithUrl<T> {
+  ): SoviWithUrl<T> {
     let resolvedPath = path as string;
     if (params[0]) {
       resolvedPath = replacePathParams(resolvedPath, params[0] as PathParams);
@@ -98,31 +98,31 @@ export class SohBuilder {
     return this._withPath<T>(resolvedPath);
   }
 
-  get<T = unknown>(): SohRequest<T> {
+  get<T = unknown>(): SoviRequest<T> {
     return this._withPath<T>("").get();
   }
 
-  post<T = unknown>(body?: SohBody): SohRequest<T> {
+  post<T = unknown>(body?: SoviBody): SoviRequest<T> {
     return this._withPath<T>("").post(body);
   }
 
-  put<T = unknown>(body?: SohBody): SohRequest<T> {
+  put<T = unknown>(body?: SoviBody): SoviRequest<T> {
     return this._withPath<T>("").put(body);
   }
 
-  patch<T = unknown>(body?: SohBody): SohRequest<T> {
+  patch<T = unknown>(body?: SoviBody): SoviRequest<T> {
     return this._withPath<T>("").patch(body);
   }
 
-  delete<T = unknown>(): SohRequest<T> {
+  delete<T = unknown>(): SoviRequest<T> {
     return this._withPath<T>("").delete();
   }
 
   executeRequest<T>(
-    method: SohMethod,
+    method: SoviMethod,
     path: string,
-    body?: SohBody
-  ): SohRequest<T> {
+    body?: SoviBody
+  ): SoviRequest<T> {
     const fullUrl = this.resolveUrl(path);
     const isJson = isJsonBody(body, this._state.headers);
     const hasContentType = !!this._state.headers["Content-Type"];
@@ -138,6 +138,6 @@ export class SohBuilder {
       body: isJson ? JSON.stringify(body) : (body as BodyInit),
     });
 
-    return new SohResponse<T>(promise);
+    return new SoviResponse<T>(promise);
   }
 }

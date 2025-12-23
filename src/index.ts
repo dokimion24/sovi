@@ -1,26 +1,26 @@
-import { SohBuilder } from "./builder";
-import type { Soh, SohClientConfig } from "./types";
+import { SoviBuilder } from "./builder";
+import type { Sovi, SoviClientConfig } from "./types";
 
 export type {
-  Soh,
-  SohClientConfig,
-  SohHeaders,
-  SohBody,
-  SohMethod,
-  SohRequest,
-  SohWithUrl,
+  Sovi,
+  SoviClientConfig,
+  SoviHeaders,
+  SoviBody,
+  SoviMethod,
+  SoviRequest,
+  SoviWithUrl,
   PathParams,
 } from "./types";
-export { SohError } from "./error";
+export { SoviError } from "./error";
 
-type SohFactory = {
-  (config?: SohClientConfig): Soh;
-  create(config?: SohClientConfig): Soh;
+type SoviFactory = {
+  (config?: SoviClientConfig): Sovi;
+  create(config?: SoviClientConfig): Sovi;
 };
 
-export const soh: SohFactory = Object.assign(
-  (config?: SohClientConfig): Soh => SohBuilder.create(config),
+export const sovi: SoviFactory = Object.assign(
+  (config?: SoviClientConfig): Sovi => SoviBuilder.create(config),
   {
-    create: (config?: SohClientConfig): Soh => SohBuilder.create(config),
+    create: (config?: SoviClientConfig): Sovi => SoviBuilder.create(config),
   }
 );

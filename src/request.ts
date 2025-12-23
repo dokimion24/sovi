@@ -1,13 +1,13 @@
-import { SohBody, SohMethod, SohRequest, SohWithUrl } from "./types";
-import { SohError } from "./error";
+import { SoviBody, SoviMethod, SoviRequest, SoviWithUrl } from "./types";
+import { SoviError } from "./error";
 
 export type ExecuteRequestFn = <T>(
-  method: SohMethod,
+  method: SoviMethod,
   path: string,
-  body?: SohBody
-) => SohRequest<T>;
+  body?: SoviBody
+) => SoviRequest<T>;
 
-export class SohResponse<T> implements SohRequest<T> {
+export class SoviResponse<T> implements SoviRequest<T> {
   private readonly _promise: Promise<Response>;
 
   constructor(promise: Promise<Response>) {
@@ -17,7 +17,7 @@ export class SohResponse<T> implements SohRequest<T> {
   private async _resolve(): Promise<Response> {
     const res = await this._promise;
     if (!res.ok) {
-      throw new SohError(res);
+      throw new SoviError(res);
     }
     return res;
   }
@@ -52,7 +52,7 @@ export class SohResponse<T> implements SohRequest<T> {
   }
 }
 
-export class SohWithUrlImpl<T> implements SohWithUrl<T> {
+export class SoviWithUrlImpl<T> implements SoviWithUrl<T> {
   private readonly _execute: ExecuteRequestFn;
   private readonly _path: string;
 
@@ -61,23 +61,23 @@ export class SohWithUrlImpl<T> implements SohWithUrl<T> {
     this._path = path;
   }
 
-  get(): SohRequest<T> {
+  get(): SoviRequest<T> {
     return this._execute<T>("GET", this._path);
   }
 
-  post(body?: SohBody): SohRequest<T> {
+  post(body?: SoviBody): SoviRequest<T> {
     return this._execute<T>("POST", this._path, body);
   }
 
-  put(body?: SohBody): SohRequest<T> {
+  put(body?: SoviBody): SoviRequest<T> {
     return this._execute<T>("PUT", this._path, body);
   }
 
-  patch(body?: SohBody): SohRequest<T> {
+  patch(body?: SoviBody): SoviRequest<T> {
     return this._execute<T>("PATCH", this._path, body);
   }
 
-  delete(): SohRequest<T> {
+  delete(): SoviRequest<T> {
     return this._execute<T>("DELETE", this._path);
   }
 }

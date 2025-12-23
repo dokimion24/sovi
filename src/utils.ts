@@ -1,4 +1,4 @@
-import type { PathParams, SohHeaders } from "./types";
+import type { PathParams, SoviHeaders } from "./types";
 
 export function replacePathParams(path: string, params: PathParams): string {
   return path.replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, (_, key) => {
@@ -10,7 +10,7 @@ export function replacePathParams(path: string, params: PathParams): string {
   });
 }
 
-export function isJsonBody(body: unknown, headers: SohHeaders): boolean {
+export function isJsonBody(body: unknown, headers: SoviHeaders): boolean {
   if (!body || typeof body !== "object") return false;
   if (body instanceof FormData || body instanceof Blob) return false;
 
