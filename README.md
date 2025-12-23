@@ -3,8 +3,6 @@
 > Tiny fetch client with a simple API.
 
 [![npm version](https://img.shields.io/npm/v/sovi.svg)](https://www.npmjs.com/package/sovi)
-[![license](https://img.shields.io/npm/l/sovi.svg)](https://github.com/dokimion24/sovi/blob/main/LICENSE)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/sovi)](https://bundlephobia.com/package/sovi)
 
 ## Features
 
