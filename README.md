@@ -47,6 +47,13 @@ const newUser = await api
 
 // With path parameters
 const user = await api.url("/users/:id", { id: 1 }).get().json();
+
+// With query parameters
+const filtered = await api
+  .url("/users")
+  .query({ page: 1, limit: 10 })
+  .get()
+  .json();
 ```
 
 ## Usage
@@ -189,7 +196,3 @@ Creates a new Sovi client instance.
 | `.arrayBuffer()` | `Promise<ArrayBuffer>` | Parse response as ArrayBuffer |
 | `.formData()`    | `Promise<FormData>`    | Parse response as FormData    |
 | `.res()`         | `Promise<Response>`    | Get raw Response object       |
-
-## License
-
-MIT © [dokimion24](https://github.com/dokimion24)
